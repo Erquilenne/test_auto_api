@@ -4,4 +4,7 @@
 
 {% block body %}
     {{ form(form) }}
+    {% if result is defined %}
+        {{ result | raw }}
+    {% endif %}
 {% endblock %}

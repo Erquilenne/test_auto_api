@@ -22,25 +22,36 @@ class ApiController extends AbstractController
             $data = $form->getData();
 
             $params = [
-                'options' => [
-                    'login' => 'depauto',
-                    'pass' => 'pass',
-                    'datatyp' => 'html',
-                    'storage' => $data['storage']
-                ]
+                'form_params' => [
+                    'options' => [
+                        'login' => 'depauto',
+                        'pass' => 'depauto',
+                        'datatyp' => 'html',
+                        'storage' => $data['storage']
+                    ],
+                ],
+
+                'curl'    => [
+                    CURLOPT_SSL_VERIFYPEER => false,
+                ],
             ];
 
             if($data['articul']) {
-                $params['data']['articul'] = $data['articul'];
+                $params['form_params']['data']['articul'] = $data['articul'];
             }
 
             if($data['brand']) {
-                $params['data']['brand'] = $data['brand'];
+                $params['form_params']['data']['brand'] = $data['brand'];
             }
 
 
             $api = new AutoApi();
             $result = $api->getItems('POST', 'https://api.auto-sputnik.ru/search_result.php', $params);
+
+            return $this->render('api/index.html.twig', [
+                'form' => $form->createView(),
+                'result' => $result,
+            ]);
 
         }
 
